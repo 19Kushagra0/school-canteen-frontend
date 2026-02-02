@@ -1,0 +1,184 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+.snacks-page {
+  padding: 40px;
+  min-height: 100vh;
+  background-color: #f5f7fb;
+  font-family: "Inter", sans-serif;
+
+  /* FONT ADDITIONS */
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+
+.snacks-header {
+  margin-bottom: 32px;
+}
+
+.snacks-title {
+  font-size: 36px;          /* clear visual hierarchy */
+  font-weight: 700;         /* strong but not heavy */
+  line-height: 1.2;         /* tight, professional */
+  letter-spacing: -0.025em; /* modern headline look */
+  margin-bottom: 6px;
+  color: #111827;
+
+}
+
+.snacks-subtitle {
+  font-size: 16px;          /* perfect body size */
+  font-weight: 400;         /* clean + readable */
+  line-height: 1.6;         /* comfortable reading */
+  letter-spacing: -0.01em;  /* subtle refinement */
+  color: #6b7280;
+}
+
+/* FLEX CONTAINER */
+.snacks-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+
+  /* background-color: red; */
+}
+
+/* CARD */
+.snack-card {
+  background-color: #ffffff;
+
+  width: 100%;
+  min-width: 370px;
+
+  padding: 20px;
+  border-radius: 12px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+
+  flex: 1;
+
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+.snack-card:hover {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.01);
+
+}
+.snack-card.ghost {
+  visibility: hidden;   /* invisible but keeps space */
+  pointer-events: none;
+
+  background-color: blue;
+}
+
+/* TOP INFO */
+.snack-info {
+  margin-bottom: 20px;
+}
+
+.snack-name {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #111827;
+
+  /* FONT ADDITIONS */
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.snack-orders {
+  font-size: 14px;
+  color: #6b7280;
+
+  /* FONT ADDITIONS */
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* FOOTER */
+.snack-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.snack-price {
+  font-size: 22px;
+  font-weight: 700;
+  color: #16a34a;
+
+  /* FONT ADDITIONS */
+  letter-spacing: -0.01em;
+}
+
+.order-btn {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+
+  background-color: #4f46e5;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  /* FONT ADDITIONS */
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.order-btn:hover {
+  background-color: #4338ca;
+}
+@media screen and (max-width:2000px) {
+     .snack-card {
+    min-width: 505px;
+  }
+}
+@media screen and (max-width:1800px) {
+     .snack-card {
+    min-width: 505px;
+  }
+}
+@media screen and (max-width:1600px) {
+     .snack-card {
+    min-width: 465px;
+  }
+}
+@media screen and (max-width:1300px) {
+  .snack-card {
+    min-width: 350px;
+  }
+}
+
+@media screen and (max-width:1180px) {
+  .snack-card {
+    min-width: 300px;
+  }
+}
+
+@media screen and (max-width:720px) {
+  .snack-card {
+    min-width: 250px;
+  }
+}
+
+@media screen and (max-width:620px) {
+  .snack-card {
+    min-width: 250px;
+  }
+}
+
+@media screen and (max-width: 615px) {
+  .snacks-header {
+    text-align: center;
+  }
+
+  .snacks-title {
+    text-align: center;
+  }
+}
