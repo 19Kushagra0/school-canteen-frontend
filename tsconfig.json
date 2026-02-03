@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-  ],
+, "src/app/snacks/page.jsx", "src/app/snacks/context/StudentContext.jsx", "src/app/layout.jsx", "src/app/AppWrapper.jsx", "src/app/page.jsx", "src/app/students/[id]/page.jsx", "src/components/ui/Navbar/Navbar.jsx", "src/components/sections/Landing/Landing.jsx", "src/app/students/page.jsx", "src/app/students/components/StudentDetail.jsx", "src/app/students/components/Student.jsx", "src/app/snacks/components/Snacks.jsx"  ],
   "exclude": ["node_modules"]
 }
