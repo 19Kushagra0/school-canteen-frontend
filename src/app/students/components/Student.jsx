@@ -1,33 +1,10 @@
+"use client";
 import "./Student.css";
-
-const students = [
-  {
-    id: 1,
-    name: "Rahul Sharma",
-    referralCode: "EDZ123",
-    totalSpent: 320,
-  },
-  {
-    id: 2,
-    name: "Priya Singh",
-    referralCode: "EDZ456",
-    totalSpent: 540,
-  },
-  {
-    id: 3,
-    name: "Amit Verma",
-    referralCode: "EDZ789",
-    totalSpent: 210,
-  },
-  {
-    id: 4,
-    name: "Neha Gupta",
-    referralCode: "EDZ321",
-    totalSpent: 430,
-  },
-];
+import Link from "next/link";
+import { useStudentContext } from "@/context/StudentContext";
 
 export default function Student() {
+  const students = useStudentContext();
   return (
     <section className="students-page">
       <header className="students-header">
@@ -43,7 +20,11 @@ export default function Student() {
 
       <div className="students-list">
         {students.map((student) => (
-          <div className="student-card" key={student.id}>
+          <Link
+            href={`/students/${student.id}`}
+            className="student-card"
+            key={student.id}
+          >
             <div className="student-info">
               <h2 className="student-name">{student.name}</h2>
               <span className="student-code">
@@ -55,7 +36,7 @@ export default function Student() {
               <span className="student-spent">₹{student.totalSpent}</span>
               <span className="spent-label">Total Spent</span>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </section>
