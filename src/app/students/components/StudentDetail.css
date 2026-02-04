@@ -122,7 +122,9 @@
 .place-order-btn:hover {
   background-color: #4338ca;
 }
-
+.orders-section p{
+  color: black;
+}
 /* RESPONSIVE */
 @media screen and (max-width: 640px) {
   .student-detail-page {
