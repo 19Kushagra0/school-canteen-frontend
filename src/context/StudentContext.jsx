@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+
 import { createContext, useContext } from "react";
 
 const StudentContext = createContext();
@@ -23,16 +24,34 @@ export function StudentProvider({ children }) {
       referralCode: "EDZ789",
       totalSpent: 210,
     },
+  ];
+
+  const orders = [
     {
-      id: 4,
-      name: "Neha Gupta",
-      referralCode: "EDZ321",
-      totalSpent: 430,
+      id: 1,
+      studentId: 1,
+      snack: "Samosa",
+      quantity: 2,
+      amount: 40,
+    },
+    {
+      id: 2,
+      studentId: 1,
+      snack: "Cold Coffee",
+      quantity: 1,
+      amount: 50,
+    },
+    {
+      id: 3,
+      studentId: 2,
+      snack: "Burger",
+      quantity: 1,
+      amount: 60,
     },
   ];
 
   return (
-    <StudentContext.Provider value={students}>
+    <StudentContext.Provider value={{ students, orders }}>
       {children}
     </StudentContext.Provider>
   );

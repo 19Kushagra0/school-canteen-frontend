@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useStudentContext } from "@/context/StudentContext";
 
 export default function Student() {
-  const students = useStudentContext();
+  const { students } = useStudentContext();
   return (
     <section className="students-page">
       <header className="students-header">
