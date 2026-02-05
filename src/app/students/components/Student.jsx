@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useStudentContext } from "@/context/StudentContext";
 
 export default function Student() {
-  const { students } = useStudentContext();
+  const { students, addStudent } = useStudentContext();
   return (
     <section className="students-page">
       <header className="students-header">
@@ -15,7 +15,9 @@ export default function Student() {
           </p>
         </div>
 
-        <button className="add-student-btn">+ Add Student</button>
+        <button className="add-student-btn" onClick={addStudent}>
+          + Add Student
+        </button>
       </header>
 
       <div className="students-list">
