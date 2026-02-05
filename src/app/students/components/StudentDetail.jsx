@@ -6,19 +6,23 @@ import { useParams } from "next/navigation";
 import { useStudentContext } from "@/context/StudentContext";
 
 export default function StudentDetail() {
-  const { students, orders } = useStudentContext();
+  // ✅ CHANGED: get addOrder from context
+  const { students, orders, addOrder } = useStudentContext();
 
   const params = useParams();
   const studentId = Number(params.id);
 
-  const student = students.find(function (item) {
+  // find selected student
+  const student = students.find((item) => {
     return item.id === studentId;
   });
 
-  const studentOrders = orders.filter(function (order) {
+  // ✅ NEW: filter only this student’s orders
+  const studentOrders = orders.filter((order) => {
     return order.studentId === studentId;
   });
 
+  // ✅ NEW: safety check
   if (!student) {
     return <p>Student not found</p>;
   }
@@ -31,6 +35,7 @@ export default function StudentDetail() {
 
       {/* Student Summary */}
       <div className="student-summary-card">
+        {/* ✅ CHANGED: dynamic student data */}
         <h1 className="student-name">{student.name}</h1>
         <p className="student-code">Referral Code: {student.referralCode}</p>
 
@@ -44,6 +49,7 @@ export default function StudentDetail() {
       <div className="orders-section">
         <h2 className="section-title">Order History</h2>
 
+        {/* ✅ NEW: show message if no orders */}
         {studentOrders.length === 0 ? (
           <p>No orders yet</p>
         ) : (
@@ -62,7 +68,10 @@ export default function StudentDetail() {
         )}
       </div>
 
-      <button className="place-order-btn">Place New Order</button>
+      {/* ✅ CHANGED: button now WORKS */}
+      <button className="place-order-btn" onClick={() => addOrder(studentId)}>
+        Place New Order
+      </button>
     </section>
   );
 }

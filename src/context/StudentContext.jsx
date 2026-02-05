@@ -1,11 +1,12 @@
 "use client";
 
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState } from "react";
+// ✅ CHANGED: added useState so orders can update dynamically
 
 const StudentContext = createContext();
 
 export function StudentProvider({ children }) {
-  const students = [
+  const [students, setStudents] = useState([
     {
       id: 1,
       name: "Rahul Sharma",
@@ -24,9 +25,10 @@ export function StudentProvider({ children }) {
       referralCode: "EDZ789",
       totalSpent: 210,
     },
-  ];
+  ]);
 
-  const orders = [
+  // ✅ CHANGED: orders is now React STATE (not const array)
+  const [orders, setOrders] = useState([
     {
       id: 1,
       studentId: 1,
@@ -48,10 +50,36 @@ export function StudentProvider({ children }) {
       quantity: 1,
       amount: 60,
     },
-  ];
+  ]);
+
+  // ✅ NEW: function to create a new order
+  function addOrder(studentId) {
+    const newOrder = {
+      id: Date.now(), // unique id
+      studentId: studentId, // links order to correct student
+      snack: "Samosa", // dummy snack
+      quantity: 1,
+      amount: 20,
+    };
+
+    setOrders([...orders, newOrder]);
+    // ✅ CHANGED: updates state → React re-renders UI
+  }
+
+  function addStudent() {
+    const newStudent = {
+      id: Date.now(),
+      name: "New Student",
+      referralCode: "EDZ" + Math.floor(Math.random() * 1000),
+      totalSpent: 0,
+    };
+
+    setStudents([...students, newStudent]);
+  }
 
   return (
-    <StudentContext.Provider value={{ students, orders }}>
+    <StudentContext.Provider value={{ students, orders, addOrder, addStudent }}>
+      {/* ✅ CHANGED: expose addOrder instead of setOrders */}
       {children}
     </StudentContext.Provider>
   );
