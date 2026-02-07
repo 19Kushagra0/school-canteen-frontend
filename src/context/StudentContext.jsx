@@ -1,90 +1,82 @@
 "use client";
+import { createContext, useState } from "react";
+import { useContext } from "react";
 
-import { createContext, useContext, useState } from "react";
-// ✅ CHANGED: added useState so orders can update dynamically
-
+// create box
 const StudentContext = createContext();
 
+// snacks data
+const SNACKS_DATA = [
+  { id: 1, name: "Samosa", price: 20 },
+  { id: 2, name: "Sandwich", price: 40 },
+  { id: 3, name: "Cold Coffee", price: 50 },
+  { id: 4, name: "Burger", price: 60 },
+  { id: 5, name: "Pizza Slice", price: 80 },
+  { id: 6, name: "French Fries", price: 45 },
+  { id: 7, name: "Noodles", price: 70 },
+  { id: 8, name: "Juice", price: 30 },
+  { id: 9, name: "Water Bottle", price: 20 },
+];
+
 export function StudentProvider({ children }) {
+  // students
   const [students, setStudents] = useState([
-    {
-      id: 1,
-      name: "Rahul Sharma",
-      referralCode: "EDZ123",
-      totalSpent: 320,
-    },
-    {
-      id: 2,
-      name: "Priya Singh",
-      referralCode: "EDZ456",
-      totalSpent: 540,
-    },
-    {
-      id: 3,
-      name: "Amit Verma",
-      referralCode: "EDZ789",
-      totalSpent: 210,
-    },
+    { id: 1, name: "Rahul Sharma", referralCode: "EDZ1", totalSpent: 90 },
+    { id: 2, name: "Priya Singh", referralCode: "EDZ2", totalSpent: 60 },
+    { id: 3, name: "Amit Verma", referralCode: "EDZ3", totalSpent: 0 },
   ]);
 
-  // ✅ CHANGED: orders is now React STATE (not const array)
-  const [orders, setOrders] = useState([
-    {
-      id: 1,
-      studentId: 1,
-      snack: "Samosa",
-      quantity: 2,
-      amount: 40,
-    },
-    {
-      id: 2,
-      studentId: 1,
-      snack: "Cold Coffee",
-      quantity: 1,
-      amount: 50,
-    },
-    {
-      id: 3,
-      studentId: 2,
-      snack: "Burger",
-      quantity: 1,
-      amount: 60,
-    },
-  ]);
-
-  // ✅ NEW: function to create a new order
-  function addOrder(studentId) {
-    const newOrder = {
-      id: Date.now(), // unique id
-      studentId: studentId, // links order to correct student
-      snack: "Samosa", // dummy snack
-      quantity: 1,
-      amount: 20,
-    };
-
-    setOrders([...orders, newOrder]);
-    // ✅ CHANGED: updates state → React re-renders UI
-  }
-
-  function addStudent() {
+  const addStudents = (student) => {
     const newStudent = {
-      id: Date.now(),
-      name: "New Student",
-      referralCode: "EDZ" + Math.floor(Math.random() * 1000),
+      id: students.length + 1,
+      name: student,
+      referralCode: `EDZ${students.length + 1}`,
       totalSpent: 0,
     };
-
     setStudents([...students, newStudent]);
-  }
+  };
+
+  // orders
+  const [orders, setOrders] = useState([
+    { id: 1, studentId: 1, snack: "Samosa", quantity: 2, amount: 40 },
+    { id: 2, studentId: 1, snack: "Cold Coffee", quantity: 1, amount: 50 },
+    { id: 3, studentId: 2, snack: "Burger", quantity: 1, amount: 60 },
+  ]);
+
+  const addOrders = (order) => {
+    const newOrder = {
+      id: orders.length + 1,
+      studentId: order.studentId,
+      snack: order.snack,
+      quantity: order.quantity,
+      amount: order.amount,
+    };
+    setOrders([...orders, newOrder]);
+
+    // 2. NOW, update that specific student's total money
+    const updatedStudents = students.map((s) => {
+      if (s.id === order.studentId) {
+        // If this is the student who ordered, add the new amount to their old total
+        return { ...s, totalSpent: s.totalSpent + order.amount };
+      }
+      // If it's not them, don't change anything
+      return s;
+    });
+
+    setStudents(updatedStudents);
+  };
 
   return (
-    <StudentContext.Provider value={{ students, orders, addOrder, addStudent }}>
-      {/* ✅ CHANGED: expose addOrder instead of setOrders */}
+    // putting array in box
+    <StudentContext.Provider
+      value={{ SNACKS_DATA, students, addStudents, orders, addOrders }}
+    >
       {children}
     </StudentContext.Provider>
   );
 }
 
-export function useStudentContext() {
+// export the box
+export function useStudent() {
   return useContext(StudentContext);
 }

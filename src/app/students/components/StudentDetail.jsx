@@ -1,31 +1,63 @@
 "use client";
-
 import "./StudentDetail.css";
 import Link from "next/link";
+import { useStudent } from "@/context/StudentContext";
 import { useParams } from "next/navigation";
-import { useStudentContext } from "@/context/StudentContext";
+import { useState } from "react";
 
 export default function StudentDetail() {
-  // ✅ CHANGED: get addOrder from context
-  const { students, orders, addOrder } = useStudentContext();
+  const { orders, addOrders, students, SNACKS_DATA } = useStudent();
 
   const params = useParams();
-  const studentId = Number(params.id);
+  const { id } = params;
+  const idNumber = Number(id);
 
-  // find selected student
-  const student = students.find((item) => {
-    return item.id === studentId;
+  const filterOrders = orders.filter((filterOrder) => {
+    return filterOrder.studentId === idNumber;
   });
 
-  // ✅ NEW: filter only this student’s orders
-  const studentOrders = orders.filter((order) => {
-    return order.studentId === studentId;
-  });
+  const [selectedSnack, setSelectedSnack] = useState("");
+  const selectedSnackHandler = (e) => {
+    setSelectedSnack(e.target.value);
+  };
 
-  // ✅ NEW: safety check
-  if (!student) {
-    return <p>Student not found</p>;
-  }
+  // show order modal
+  const [showOrderModal, setShowOrderModal] = useState(false);
+  const showOrderModalHandler = () => {
+    setShowOrderModal(!showOrderModal);
+  };
+
+  // quantity handler
+  const [quantity, setQuantity] = useState(1);
+  const quantityHandler = (e) => {
+    setQuantity(Number(e.target.value));
+  };
+
+  const saveOrder = () => {
+    if (selectedSnack === "") {
+      alert("Hey! You forgot to pick a snack.");
+      return; // This stops the function right here so nothing breaks
+    }
+
+    const snackNumber = Number(selectedSnack);
+
+    console.log("quantity", quantity);
+    console.log("name ", SNACKS_DATA[snackNumber].name);
+    console.log(" price", SNACKS_DATA[snackNumber].price);
+    console.log("studentId", idNumber);
+
+    const order = {
+      studentId: idNumber,
+      snack: SNACKS_DATA[snackNumber].name,
+      quantity: quantity,
+      amount: SNACKS_DATA[snackNumber].price * quantity,
+    };
+    addOrders(order);
+
+    setQuantity(1);
+    setSelectedSnack("");
+    showOrderModalHandler();
+  };
 
   return (
     <section className="student-detail-page">
@@ -33,45 +65,85 @@ export default function StudentDetail() {
         ← Back to Students
       </Link>
 
-      {/* Student Summary */}
+      {/* STUDENT SUMMARY */}
       <div className="student-summary-card">
         {/* ✅ CHANGED: dynamic student data */}
-        <h1 className="student-name">{student.name}</h1>
-        <p className="student-code">Referral Code: {student.referralCode}</p>
+        <h1 className="student-name">{students[id - 1].name}</h1>
+        <p className="student-code">{students[id - 1].referralCode}</p>
 
         <div className="student-total">
           <span>Total Spent</span>
-          <strong>₹{student.totalSpent}</strong>
+          <strong>₹{students[id - 1].totalSpent}</strong>
         </div>
       </div>
 
-      {/* Orders */}
+      {/* ORDERS */}
       <div className="orders-section">
         <h2 className="section-title">Order History</h2>
 
-        {/* ✅ NEW: show message if no orders */}
-        {studentOrders.length === 0 ? (
-          <p>No orders yet</p>
-        ) : (
-          <div className="orders-list">
-            {studentOrders.map((order) => (
-              <div className="order-row" key={order.id}>
-                <div>
-                  <p className="order-snack">{order.snack}</p>
-                  <span className="order-qty">Qty: {order.quantity}</span>
+        <div className="orders-list">
+          {filterOrders.length === 0 ? (
+            <div className="">No order yet</div>
+          ) : (
+            filterOrders.map((order, index) => {
+              return (
+                <div key={index} className="order-row">
+                  <div>
+                    <p className="order-snack">{order.snack}</p>
+                    <span className="order-qty">{order.quantity}</span>
+                  </div>
+                  <span className="order-amount">₹{order.amount}</span>
                 </div>
-
-                <span className="order-amount">₹{order.amount}</span>
-              </div>
-            ))}
-          </div>
-        )}
+              );
+            })
+          )}
+        </div>
       </div>
 
-      {/* ✅ CHANGED: button now WORKS */}
-      <button className="place-order-btn" onClick={() => addOrder(studentId)}>
+      <button onClick={showOrderModalHandler} className="place-order-btn">
         Place New Order
       </button>
+
+      {showOrderModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3>Add Order</h3>
+
+            <select
+              value={selectedSnack}
+              onChange={selectedSnackHandler}
+              className="snack-select"
+            >
+              <option value="">-- Click to choose --</option>{" "}
+              {/* This matches your "" state */}
+              {SNACKS_DATA.map((el, index) => {
+                return (
+                  <option key={index} value={index}>
+                    {el.name} - ₹{el.price}
+                  </option>
+                );
+              })}
+            </select>
+
+            <input
+              type="number"
+              min="1"
+              value={quantity}
+              onChange={quantityHandler}
+            />
+
+            <div className="modal-actions">
+              <button onClick={saveOrder} className="modal-save">
+                Save
+              </button>
+
+              <button onClick={showOrderModalHandler} className="modal-cancel">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
